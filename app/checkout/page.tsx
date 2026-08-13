@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter, useSearchParams } from "next/navigation";
-import { FormEvent, useState } from "react";
+import { FormEvent, Suspense, useState } from "react";
 import { PIX_KEY } from "../../lib/config";
 
 const PLAN_INFO: Record<
@@ -40,7 +40,7 @@ const PLAN_INFO: Record<
   }
 };
 
-export default function CheckoutPage() {
+function CheckoutContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const plano = (searchParams.get("plano") || "VIP_MENSAL").toUpperCase();
@@ -203,6 +203,14 @@ export default function CheckoutPage() {
         </div>
       </section>
     </div>
+  );
+}
+
+export default function CheckoutPage() {
+  return (
+    <Suspense fallback={<div className="text-center p-8 text-slate-400">Carregando checkout...</div>}>
+      <CheckoutContent />
+    </Suspense>
   );
 }
 

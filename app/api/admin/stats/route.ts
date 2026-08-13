@@ -5,6 +5,8 @@ import { getCurrentUser } from "../../../../lib/auth";
 import { PurchaseStatus, VipPlan } from "@prisma/client";
 import { validateCsrfOrigin } from "../../../../lib/security";
 
+export const dynamic = "force-dynamic";
+
 export async function GET(request: Request) {
   try {
     if (!validateCsrfOrigin(request)) {

@@ -23,8 +23,7 @@
     "incremental": true,
     "noEmit": true,
     "types": [
-      "node",
-      "jest"
+      "node"
     ],
     "plugins": [
       {

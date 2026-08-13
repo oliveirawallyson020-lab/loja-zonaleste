@@ -89,7 +89,7 @@ export async function POST(request: Request) {
       comprovanteUrl = `dev-blob://${validated.blobPath}`;
     } else {
       const blob = await put(validated.blobPath, validated.buffer, {
-        access: "private",
+        access: "public",
         contentType: validated.mime
       });
       comprovanteUrl = blob.url;

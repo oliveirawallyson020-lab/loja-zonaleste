@@ -21,6 +21,8 @@ const periodoSchema = z
   .optional()
   .default("30");
 
+export const dynamic = "force-dynamic";
+
 export async function GET(request: NextRequest) {
   try {
     if (!validateCsrfOrigin(request)) {
