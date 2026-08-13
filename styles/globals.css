@@ -1,0 +1,125 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text",
+    "Segoe UI", sans-serif;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+input,
+button,
+textarea,
+select {
+  font: inherit;
+}
+
+.input-root {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  font-size: 0.85rem;
+}
+
+.input-label {
+  color: #e5e7eb;
+}
+
+.input-field {
+  border-radius: 0.75rem;
+  border: 1px solid rgba(148, 163, 184, 0.5);
+  background: rgba(15, 23, 42, 0.9);
+  padding: 0.6rem 0.75rem;
+  color: #e5e7eb;
+}
+
+.input-field:focus {
+  outline: none;
+  border-color: rgba(129, 140, 248, 0.9);
+  box-shadow: 0 0 0 1px rgba(129, 140, 248, 0.9);
+}
+
+.input-help {
+  font-size: 0.75rem;
+  color: #9ca3af;
+}
+
+.btn-primary-solid {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.6rem 1.2rem;
+  border-radius: 9999px;
+  border: none;
+  cursor: pointer;
+  background: radial-gradient(circle at top left, #a855f7, #6366f1);
+  color: white;
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  transition:
+    background 0.16s ease,
+    transform 0.12s ease,
+    box-shadow 0.12s ease;
+}
+
+.btn-primary-solid:hover {
+  transform: translateY(-1px);
+  box-shadow:
+    0 0 16px rgba(129, 140, 248, 0.7),
+    0 0 36px rgba(56, 189, 248, 0.5);
+}
+
+.btn-ghost {
+  padding: 0.6rem 1.1rem;
+  border-radius: 9999px;
+  border: 1px solid rgba(148, 163, 184, 0.4);
+  background: transparent;
+  color: #e5e7eb;
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+
+.badge-status {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.15rem 0.55rem;
+  border-radius: 9999px;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+}
+
+.badge-status-AGUARDANDO {
+  background: rgba(251, 191, 36, 0.16);
+  color: #fbbf24;
+}
+
+.badge-status-APROVADO {
+  background: rgba(34, 197, 94, 0.16);
+  color: #22c55e;
+}
+
+.badge-status-RECUSADO {
+  background: rgba(239, 68, 68, 0.16);
+  color: #ef4444;
+}
+
+.badge-status-EXPIRADO {
+  background: rgba(148, 163, 184, 0.16);
+  color: #9ca3af;
+}
+

@@ -1,0 +1,107 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+/// Papel do usuário na aplicação.
+enum Role {
+  USER
+  ADMIN
+}
+
+/// Planos VIP disponíveis.
+enum VipPlan {
+  VIP_SEMANAL
+  VIP_MENSAL
+  CARRO_BLINDADO_SEMANAL
+  CARRO_BLINDADO_MENSAL
+  MOTO_SEMANAL
+  MOTO_MENSAL
+}
+
+/// Status de uma compra de VIP.
+enum PurchaseStatus {
+  AGUARDANDO
+  APROVADO
+  RECUSADO
+  EXPIRADO
+}
+
+/// Ações administrativas possíveis no painel.
+enum AdminAction {
+  APPROVE // aprovação de compra (gera token)
+  REJECT // recusa de compra
+  REVOKE // revogação manual de VIP
+  MARK_USED // marcação de token como usado
+}
+
+model User {
+  id          String    @id @default(cuid())
+  nome        String
+  email       String    @unique
+  usernameGta String    @unique @map("username_gta")
+  senhaHash   String    @map("senha_hash")
+  role        Role      @default(USER)
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime  @updatedAt @map("updated_at")
+  deletedAt   DateTime? @map("deleted_at")
+
+  purchases         Purchase[] @relation("PurchaseUser")
+  adminLogs         AdminLog[] @relation("AdminUserLogs")
+  approvedPurchases Purchase[] @relation("PurchaseApprovedBy")
+
+  @@map("users")
+}
+
+model Purchase {
+  id                 String         @id @default(cuid())
+  userId             String         @map("user_id")
+  user               User           @relation("PurchaseUser", fields: [userId], references: [id], onDelete: Cascade)
+  plano              VipPlan
+  valorOriginal      Decimal?       @map("valor_original") @db.Decimal(10, 2)
+  descontoPercentual Int?           @map("desconto_percentual")
+  valorPago          Decimal        @map("valor_pago") @db.Decimal(10, 2)
+  comprovanteUrl     String?        @map("comprovante_url")
+  token              String?        @unique
+  tokenUsado         Boolean        @default(false) @map("token_usado")
+  tokenGeradoEm      DateTime?      @map("token_gerado_em")
+  tokenExpiraEm      DateTime?      @map("token_expira_em")
+  status             PurchaseStatus @default(AGUARDANDO)
+  dataCompra         DateTime       @default(now()) @map("data_compra")
+  dataInicio         DateTime?      @map("data_inicio")
+  dataExpiracao      DateTime?      @map("data_expiracao")
+  ipCompra           String?        @map("ip_compra")
+  aprovadoPorId      String?        @map("aprovado_por_id")
+  aprovadoPor        User?          @relation("PurchaseApprovedBy", fields: [aprovadoPorId], references: [id], onDelete: SetNull)
+  aprovadoEm         DateTime?      @map("aprovado_em")
+  canceladoEm        DateTime?      @map("cancelado_em")
+  createdAt          DateTime       @default(now()) @map("created_at")
+  updatedAt          DateTime       @updatedAt @map("updated_at")
+
+  @@index([userId])
+  @@index([status])
+  @@index([plano])
+  @@index([dataExpiracao])
+  @@index([aprovadoPorId])
+  @@index([status, dataCompra])
+  @@index([token, status])
+  @@map("purchases")
+}
+
+model AdminLog {
+  id           String      @id @default(cuid())
+  adminId      String      @map("admin_id")
+  admin        User        @relation("AdminUserLogs", fields: [adminId], references: [id], onDelete: Restrict)
+  action       AdminAction @map("action")
+  targetType   String?     @map("target_type")
+  referenciaId String?     @map("referencia_id")
+  createdAt    DateTime    @default(now()) @map("created_at")
+
+  @@index([adminId])
+  @@index([createdAt])
+  @@map("admin_logs")
+}
